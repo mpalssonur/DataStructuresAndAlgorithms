@@ -128,5 +128,10 @@ int main() {
 
     print_list(list);
 
+    list_delete_start(list);
+    list_delete_value(list, 2);
+
+    print_list(list);
+
     return 0;
 }
