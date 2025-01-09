@@ -107,3 +107,26 @@ void list_delete_value(struct SinglyLinkedList* list, int value) {
     }
     return;
 }
+
+void print_list(struct SinglyLinkedList* list) {
+    struct Node* current = list->head;
+    while (current != NULL) {
+        printf("%d->", current->data);
+        current = current->next;
+    }
+    printf("\n");
+    return;
+}
+
+int main() {
+    struct SinglyLinkedList* list = init_list();
+
+    for(int i = 0; i < 10; i++) {
+        list_add_start(list, i);
+    }
+    list_add_index(list, 5, 50);
+
+    print_list(list);
+
+    return 0;
+}
