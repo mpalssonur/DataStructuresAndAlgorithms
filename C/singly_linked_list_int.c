@@ -27,8 +27,15 @@ struct SinglyLinkedList* init_list() {
     return list;
 }
 
+struct Node* create_node(int value) {
+    struct Node* new_node = malloc(sizeof(struct Node*));
+    new_node->next = NULL;
+    new_node->data = value;
+    return new_node;
+}
+
 void list_add_start(struct SinglyLinkedList* list, int value) {
-    struct Node* new_node = malloc(sizeof(struct Node));
+    struct Node* new_node = create_node(value);
     if (new_node == NULL) {
         printf("Allocation of Node failed. Adding %d to list failed", value);
         return;
@@ -45,7 +52,7 @@ void list_add_index(struct SinglyLinkedList* list, int index, int value) {
         return;
     }
 
-    struct Node* new_node = malloc(sizeof(struct Node));
+    struct Node* new_node = create_node(value);
     if (new_node == NULL) {
         printf("Allocation of Node failed. Adding %d to list at index %d failed", value, index);
         return;
@@ -61,6 +68,18 @@ void list_add_index(struct SinglyLinkedList* list, int index, int value) {
     new_node->data = value;
     new_node->next = current_node->next;
     current_node->next = new_node;
+    list->length++;
+    return;
+}
+
+void list_add_end(struct SinglyLinkedList* list, int value) {
+    struct Node* new_node = create_node(value);
+    new_node->data = value;
+    struct Node* current = list->head;
+    while(current->next) {
+        current = current->next;
+    }
+    current->next = new_node;
     list->length++;
     return;
 }
@@ -108,6 +127,40 @@ void list_delete_value(struct SinglyLinkedList* list, int value) {
     return;
 }
 
+void list_delete_index(struct SinglyLinkedList* list, int index) {
+    if (index >= list->length) {
+        return;
+    }
+    struct Node* current = list->head;
+    int i = 0;
+    while((i < index-1) && (current->next)) {
+        i++;
+        current = current->next;
+    }
+    if (current->next) {
+        struct Node* tmp = current->next;
+        current->next = current->next->next;
+        tmp->next = NULL;
+        tmp->data = 0;
+        free(tmp);
+        list->length--;
+        return;
+    }
+    return;
+}
+
+void empty_list(struct SinglyLinkedList* list) {
+    while(list->head) {
+        list_delete_start(list);
+    }
+    return;
+}
+
+void free_list(struct SinglyLinkedList* list) {
+    empty_list(list);
+    free(list);
+}
+
 void print_list(struct SinglyLinkedList* list) {
     struct Node* current = list->head;
     while (current != NULL) {
@@ -125,13 +178,18 @@ int main() {
         list_add_start(list, i);
     }
     list_add_index(list, 5, 50);
+    list_add_end(list,20);
 
     print_list(list);
 
     list_delete_start(list);
     list_delete_value(list, 2);
+    list_delete_index(list, 1);
+    list_delete_index(list, 2);
 
     print_list(list);
+
+    free_list(list);
 
     return 0;
 }
