@@ -1,15 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stddef.h>
-struct Node {
-    int data;
-    struct Node* next;
-};
-
-struct SinglyLinkedList {
-    struct Node* head;
-    int length;
-};
+#include "singly_linked_list_int.h"
 
 struct SinglyLinkedList* create_list() {
     struct SinglyLinkedList *list = malloc(sizeof(struct SinglyLinkedList));
